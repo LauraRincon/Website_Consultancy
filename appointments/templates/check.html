@@ -1,0 +1,25 @@
+{% load widget_tweaks %}
+
+<div class="container">
+    <h1>Projects</h1>
+
+    {% if object_pk and object_name %}
+        <h2> 
+            This is the page for {{object_name}}
+            with pk {{object_pk}}, 
+            description {{object_description}},
+            appt: {{object_appointment}}
+        </h2>
+    {% else %}
+        <h2>List of projects:</h2>
+        {% for name, values in proj_dict.items %}
+            <a href="{% url 'check' values.pk %}">
+                <h3>
+                    {{name}} with pk {{values.pk}}, 
+                    description: {{values.description}},
+                    appt : {{values.appt}}
+                </h3>
+            </a>
+        {% endfor %}
+    {% endif %}
+</div>
