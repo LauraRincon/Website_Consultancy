@@ -4,6 +4,7 @@ from django.http import HttpResponse, Http404
 from .models import Project
 from .forms import ProjForm
 
+
 # Create your views here.
 def new(request):
     new_form = ProjForm()
@@ -26,33 +27,36 @@ def new(request):
             {
                 'projectform': new_form,
                 'note ': note,
-                'created_person_pk': new_pk,
+                # 'created_person_pk': new_pk,
             }
         )
-    else: 
+    else:
         note = 'Regiter your new project'
         return render(
             request,
             'new.html',
             {
                 'note ': note,
-                'projectform' : new_form,
+                'projectform': new_form,
             }
-        ) 
+        )
+
 
 def check(request, pk=None):
     if pk:
         try:
             proj = Project.objects.get(pk=pk)
-        except:
-            raise Http404('Project with pk {} doesn\'t exist',format(pk))
+        except Project.DoesNotExist:
+            raise Http404('Project with pk {} doesn\'t exist', format(pk))
         return render(
             request,
             'check.html',
             {
                 'object_pk': proj.pk,
                 'object_name': proj.name,
-                'object_description': proj.description,
+                'object_place': proj.place,
+                'object_billing': proj.billing,
+                'object_category': proj.category,
                 'object_appointment': proj.appt_date,
             }
         )
@@ -61,7 +65,9 @@ def check(request, pk=None):
         for proj in Project.objects.all():
             proj_dict[proj.name] = {
                 'pk': proj.pk,
-                'description' : proj.description,
+                'place': proj.place,
+                'billing': proj.billing,
+                'category': proj.category,
                 'appt': proj.appt_date,
             }
         return render(

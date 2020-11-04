@@ -7,7 +7,7 @@
 
     <form action="{% url 'new' %}" method="POST">
         {% csrf_token %}
-        
+
         {% for field in projectform %}
         <div class="form-group">
 

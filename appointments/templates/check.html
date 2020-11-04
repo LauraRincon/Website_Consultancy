@@ -4,10 +4,12 @@
     <h1>Projects</h1>
 
     {% if object_pk and object_name %}
-        <h2> 
+        <h2>
             This is the page for {{object_name}}
-            with pk {{object_pk}}, 
-            description {{object_description}},
+            with pk {{object_pk}},
+            place {{object_place}},
+            billing {{object_billing}},
+            category {{object_category}},
             appt: {{object_appointment}}
         </h2>
     {% else %}
@@ -15,8 +17,10 @@
         {% for name, values in proj_dict.items %}
             <a href="{% url 'check' values.pk %}">
                 <h3>
-                    {{name}} with pk {{values.pk}}, 
-                    description: {{values.description}},
+                    {{name}} with pk {{values.pk}},
+                    place: {{values.place}},
+                    billing: {{values.billing}},
+                    category: {{values.category}},
                     appt : {{values.appt}}
                 </h3>
             </a>
