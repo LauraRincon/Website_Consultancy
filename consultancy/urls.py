@@ -23,4 +23,5 @@ urlpatterns = [
     path('check/', views.check, name='check'),
     path('check/<int:pk>', views.check, name='check'),
     path('new/', views.new, name='new'),
+    path('', views.check, name='index'), #Fix: route to real home page 
 ]

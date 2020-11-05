@@ -26,7 +26,7 @@ def new(request):
             'new.html',
             {
                 'projectform': new_form,
-                'note ': note,
+                'note': note,
                 # 'created_person_pk': new_pk,
             }
         )
@@ -36,7 +36,7 @@ def new(request):
             request,
             'new.html',
             {
-                'note ': note,
+                'note': note,
                 'projectform': new_form,
             }
         )
@@ -47,7 +47,7 @@ def check(request, pk=None):
         try:
             proj = Project.objects.get(pk=pk)
         except Project.DoesNotExist:
-            raise Http404('Project with pk {} doesn\'t exist', format(pk))
+            raise Http404('Project with pk {} doesn\'t exist'.format(pk))
         return render(
             request,
             'check.html',
