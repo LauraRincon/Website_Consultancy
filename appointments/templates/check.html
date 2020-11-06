@@ -2,7 +2,6 @@
 
 <div class="container">
     <h1>Projects</h1>
-
     {% if object_pk and object_name %}
         <h2>
             This is the page for {{object_name}}
@@ -12,10 +11,10 @@
             category {{object_category}},
             appt: {{object_appointment}}
         </h2>
-    {% else %}
+    {% elif proj_dict %}
         <h2>List of projects:</h2>
         {% for name, values in proj_dict.items %}
-            <a href="{% url 'check' values.pk %}">
+            <a href="{% url 'check_pj' values.uid values.pk %}">
                 <h3>
                     {{name}} with pk {{values.pk}},
                     place: {{values.place}},
