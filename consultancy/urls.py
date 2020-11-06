@@ -20,7 +20,8 @@ from appointments import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('check/', views.check, name='check'),
-    path('check/<int:pk>', views.check, name='check'),
+    path('check/id=<int:id>', views.check, name='check'),
+    path('check/id=<int:id>/pj=<int:pk>', views.check, name='check_pj'),
     path('new/', views.new, name='new'),
+    path('', views.check, name='index'), #Fix: route to real home page 
 ]
