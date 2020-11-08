@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
@@ -10,16 +11,13 @@ CATEGORY = [
     ('Large Scale', 'Large Scale')
 ]
 
-class User(models.Model):
-    first_name = models.CharField(max_length=20, default='userUnknown')
-    last_name = models.CharField(max_length=20, default='')
-    email = models.EmailField(max_length=254)
+class Client(AbstractUser):
     tel = models.CharField(max_length=20, default='')
     enterprise = models.CharField(max_length=20, default='')
-    password =  models.CharField(max_length=50)
+
 
     def __str__(self):
-        return "{}".format(self.first_name)
+        return "{} {}".format(self.first_name, self.last_name)
 
 class Project(models.Model):
     name = models.CharField(max_length=20, default='')
@@ -28,7 +26,7 @@ class Project(models.Model):
     category = models.CharField(max_length=50, choices=CATEGORY)
     # user
     appt_date = models.DateTimeField('appointment date')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None) 
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, default=None) 
 
     def __str__(self):
         return "{} - <<{}>>".format(self.name, self.appt_date)
