@@ -6,6 +6,7 @@ class ProjForm(forms.ModelForm):
 
     class Meta:
         model = Project
+        exclude = ["client"]
         fields = [
             'name',
             'place',

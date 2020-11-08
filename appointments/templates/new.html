@@ -1,23 +1,28 @@
 {% load widget_tweaks %}
 
 <div class="container">
-    <h1>Create a new Project</h1>
+    {% if user.is_authenticated %}
+        <h1>Create a new Project</h1>
 
-    <h2>{{ note }}</h2>
+        <h2>{{ note }}</h2>
 
-    <form action="{% url 'new' %}" method="POST">
-        {% csrf_token %}
+        <form action="{% url 'new' %}" method="POST">
+            {% csrf_token %}
 
-        {% for field in projectform %}
-        <div class="form-group">
+            {% for field in projectform %}
+            <div class="form-group">
 
-            {{ field.label_tag }}
-            {% render_field field class="form-control" %}
+                {{ field.label_tag }}
+                {% render_field field class="form-control" %}
 
-        </div>
-        {% endfor %}
+            </div>
+            {% endfor %}
 
-        <input type="submit" vaule="New Project Object">
-    </form>
-
+            <input type="submit" vaule="New Project Object">
+        </form>
+        <footer>
+            <a href="{% url 'check' user.id %}">Project.</a>
+        </footer>
+    {% endif %}
 </div>
+

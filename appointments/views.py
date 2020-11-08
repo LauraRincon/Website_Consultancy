@@ -1,17 +1,24 @@
+from urllib.parse import urlencode
 from django.shortcuts import render
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 
-from .models import User, Project
+from .models import Client, Project
 from .forms import ProjForm
 
 
 # Create your views here.
+@login_required
 def new(request):
     new_form = ProjForm()
     if request.method == 'POST':
         filled_form = ProjForm(request.POST)
         if filled_form.is_valid():
-            new_proj = filled_form.save()
+            user = Client.objects.get(id=request.user.id)
+            new_proj = filled_form.save(commit=False)
+            new_proj.client = user
+            new_proj.save()
             new_pk = new_proj.pk
             note = (
                 'Project object with pk \'{}\' was successfully created, \n'
@@ -27,7 +34,6 @@ def new(request):
             {
                 'projectform': new_form,
                 'note': note,
-                # 'created_person_pk': new_pk,
             }
         )
     else:
@@ -41,14 +47,14 @@ def new(request):
             }
         )
 
-
+@login_required
 def check(request, pk=None, id=None):
-    if id:
+    if id==request.user.id:
         try:
-            user = User.objects.get(pk=id)
+            client = Client.objects.get(pk=id)
             if pk:
                 try:
-                    proj = Project.objects.get(user=user, pk=pk)
+                    proj = Project.objects.get(client=client, pk=pk)
                     return render(
                         request,
                         'check.html',
@@ -65,7 +71,7 @@ def check(request, pk=None, id=None):
                     raise Http404('Project with pk {} doesn\'t exist'.format(pk))
             else:
                 proj_dict = {}
-                for proj in user.project_set.all():
+                for proj in client.project_set.all():
                     proj_dict[proj.name] = {
                         'pk': proj.pk,
                         'place': proj.place,
@@ -81,10 +87,11 @@ def check(request, pk=None, id=None):
                     'proj_dict': proj_dict,
                 }
                 )
-        except User.DoesNotExist:
+        except Client.DoesNotExist:
             raise Http404('User with id {} doesn\'t exist'.format(id))
     else:
-        return render(
-            request,
-            'check.html'
-        )
+        client = Client.objects.get(pk=request.user.id)
+        base_url = '/check/'
+        query_string =  urlencode({'id': (client.pk)})
+        url = '{}{}'.format(base_url, query_string)  
+        return HttpResponseRedirect(url)
