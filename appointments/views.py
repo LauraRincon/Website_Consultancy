@@ -1,11 +1,12 @@
 from urllib.parse import urlencode
 from django.shortcuts import render
-from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.contrib.auth import authenticate, login
+from django.http import Http404, HttpResponseRedirect
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
 from .models import Client, Project
-from .forms import ProjForm
+from .forms import ProjForm, ClientForm
 
 
 # Create your views here.
@@ -47,51 +48,100 @@ def new(request):
             }
         )
 
+
 @login_required
 def check(request, pk=None, id=None):
-    if id==request.user.id:
+    if id == request.user.id:
         try:
             client = Client.objects.get(pk=id)
-            if pk:
-                try:
-                    proj = Project.objects.get(client=client, pk=pk)
-                    return render(
-                        request,
-                        'check.html',
-                        {
-                            'object_pk': proj.pk,
-                            'object_name': proj.name,
-                            'object_place': proj.place,
-                            'object_billing': proj.billing,
-                            'object_category': proj.category,
-                            'object_appointment': proj.appt_date,
-                        }
-                    )
-                except Project.DoesNotExist:
-                    raise Http404('Project with pk {} doesn\'t exist'.format(pk))
-            else:
-                proj_dict = {}
-                for proj in client.project_set.all():
-                    proj_dict[proj.name] = {
-                        'pk': proj.pk,
-                        'place': proj.place,
-                        'billing': proj.billing,
-                        'category': proj.category,
-                        'appt': proj.appt_date,
-                        'uid' : id
-                    }
-                return render(
+        except Client.DoesNotExist:
+            raise Http404('User with id {} doesn\'t exist'.format(id))
+        if pk:
+            try:
+                proj = Project.objects.get(client=client, pk=pk)
+            except Project.DoesNotExist:
+                raise Http404('Project with pk {} doesn\'t exist'.format(pk))
+            return render(
+                request,
+                'check.html',
+                {
+                    'object_pk': proj.pk,
+                    'object_name': proj.name,
+                    'object_place': proj.place,
+                    'object_billing': proj.billing,
+                    'object_category': proj.category,
+                    'object_appointment': proj.appt_date,
+                }
+            )
+        else:
+            proj_dict = {}
+            for proj in client.project_set.all():
+                proj_dict[proj.name] = {
+                    'pk': proj.pk,
+                    'place': proj.place,
+                    'billing': proj.billing,
+                    'category': proj.category,
+                    'appt': proj.appt_date,
+                    'uid': id
+                }
+            return render(
                 request,
                 'check.html',
                 {
                     'proj_dict': proj_dict,
                 }
-                )
-        except Client.DoesNotExist:
-            raise Http404('User with id {} doesn\'t exist'.format(id))
+            )
     else:
         client = Client.objects.get(pk=request.user.id)
         base_url = '/check/'
-        query_string =  urlencode({'id': (client.pk)})
-        url = '{}{}'.format(base_url, query_string)  
+        query_string = urlencode({'id': (client.pk)})
+        url = '{}{}'.format(base_url, query_string)
         return HttpResponseRedirect(url)
+
+
+def delete(request, pk=None):
+    if pk is not None and request.method == 'POST':
+        proj = Project.objects.get(pk=pk)
+        proj.delete()
+        return redirect('/check')
+    else:
+        return render(
+            request,
+            'delete.html'
+        )
+
+
+def singup(request):
+    new_form = ClientForm()
+    if request.method == 'POST':
+        filled_form = ClientForm(request.POST)
+        if filled_form.is_valid():
+            filled_form.save
+            email = filled_form.cleaned_data.get('email')
+            raw_password = filled_form.cleaned_data.get('password1')
+            account = authenticate(email=email, password=raw_password)
+            login(request, account)
+            return redirect('check')
+            # note = "Your registry was succesful! Please go back to the \
+            #        homepage and log in"
+        else:
+            note = 'Invalid form values, no user created'
+        return render(
+            request,
+            'singup.html',
+            {
+                'clientform': new_form,
+                'note': note,
+                'formErrors': filled_form.errors.as_data()
+            }
+        )
+    else:
+        note = 'Regiter your user'
+        return render(
+            request,
+            'singup.html',
+            {
+                'note': note,
+                'clientform': new_form,
+            }
+        )

@@ -1,0 +1,7 @@
+
+<h1>Prueba delete</h1>
+<h2>Please delete projects from it's own page using the button</h2>
+<form action="{% url 'check' %}" method="GET">
+  {% csrf_token %}
+  <input type="submit" name="Back_button" value="Back to Proyects">
+</form>
