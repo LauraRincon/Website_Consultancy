@@ -32,7 +32,13 @@
 </div>
 </form>
 
+
 {# Assumes you setup the password_reset view in your URLconf #}
 <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+
+<form action="{% url 'singup' %}" method="GET">
+  {% csrf_token %}
+  <input type="submit" name="SingUp_button" value="Sing Up">
+</form>
 
 {% endblock %}

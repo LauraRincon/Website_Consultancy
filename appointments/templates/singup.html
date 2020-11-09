@@ -1,0 +1,29 @@
+{% load widget_tweaks %}
+
+<div class="container">
+        <h1>Create a your user</h1>
+
+        <h2> {{ note }} </h2>
+
+        <form action="{% url 'singup' %}" method="POST">
+            {% csrf_token %}
+
+            {% for field in clientform %}
+            <div class="form-group">
+
+                {{ field.label_tag }}
+                {% render_field field class="form-control" %}
+
+            </div>
+            {% endfor %}
+
+            <input type="submit" vaule="New client Object">
+        </form>
+
+        {% for field in formErrors %}
+            <div>
+              Error in {{  field }}: falta ver como sacamos los errores de aca
+            </div>
+        {% endfor %}
+
+</div>

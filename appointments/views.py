@@ -116,14 +116,9 @@ def singup(request):
     if request.method == 'POST':
         filled_form = ClientForm(request.POST)
         if filled_form.is_valid():
-            filled_form.save
-            email = filled_form.cleaned_data.get('email')
-            raw_password = filled_form.cleaned_data.get('password1')
-            account = authenticate(email=email, password=raw_password)
-            login(request, account)
-            return redirect('check')
-            # note = "Your registry was succesful! Please go back to the \
-            #        homepage and log in"
+            filled_form.save()
+            note = "Your registry was succesful! Please go back to the \
+                    homepage and log in"
         else:
             note = 'Invalid form values, no user created'
         return render(

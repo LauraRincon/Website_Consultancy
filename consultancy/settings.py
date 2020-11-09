@@ -123,3 +123,4 @@ STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'appointments.Client'
 LOGIN_REDIRECT_URL = '/check'
+LOGOUT_REDIRECT_URL = ''
