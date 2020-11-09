@@ -18,15 +18,25 @@ def new(request):
         if filled_form.is_valid():
             user = Client.objects.get(id=request.user.id)
             new_proj = filled_form.save(commit=False)
-            new_proj.client = user
-            new_proj.save()
-            new_pk = new_proj.pk
-            note = (
-                'Project object with pk \'{}\' was successfully created, \n'
-                'Name: {}.'.format(
-                    new_pk, filled_form.cleaned_data['name']
-                    )
-            )
+
+            dateAvailable = True
+            for project in Project.objects.all():
+                if project.appt_date == new_proj.appt_date:
+                    dateAvailable = False
+                    break
+
+            if dateAvailable:
+                new_proj.client = user
+                new_proj.save()
+                new_pk = new_proj.pk
+                note = (
+                    'Project object with pk \'{}\' was successfully created,\n'
+                    'Name: {}.'.format(
+                        new_pk, filled_form.cleaned_data['name']
+                        )
+                )
+            else:
+                note = 'That date is not available.'
         else:
             note = 'Invalid form values, no project created'
         return render(
