@@ -29,7 +29,7 @@ urlpatterns = [
     path('delete/', views.delete, name='delete'),
     path('delete/<int:pk>', views.delete, name='delete'),
     path('new/', views.new, name='new'),
-    path('', views.check, name='index'),  # Fix: route to real home page
+    path('', views.index, name='index'),  # Fix: route to real home page
     path('singup', views.singup, name='singup'),
     path('modify/<int:pk>', views.modify, name='modify'),
     ]

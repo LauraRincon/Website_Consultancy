@@ -214,3 +214,10 @@ def modify(request, pk=None):
                 'project_pk': pk,
             }
         )
+
+
+def index(request):
+    return render(
+        request,
+        'index.html',
+    )
