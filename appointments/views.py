@@ -150,3 +150,67 @@ def singup(request):
                 'clientform': new_form,
             }
         )
+
+
+@login_required
+def modify(request, pk=None):
+    note = ''
+    if request.method == 'POST':
+        filled_form = ProjForm(request.POST)
+        try:
+            old_proj = Project.objects.get(client=request.user.id, pk=pk)
+        except Project.DoesNotExist:
+            raise Http404('Project with pk {} doesn\'t exist'.format(pk))
+        if filled_form.is_valid():
+            user = Client.objects.get(id=request.user.id)
+            new_proj = filled_form.save(commit=False)
+            old_proj.delete()
+
+            dateAvailable = True
+            for project in Project.objects.all():
+                if project.appt_date == new_proj.appt_date:
+                    dateAvailable = False
+                    break
+
+            if dateAvailable:
+                new_proj.client = user
+                new_proj.save()
+                new_pk = new_proj.pk
+                note = (
+                    'Project object with pk \'{}\' was successfully modified, '
+                    'Name: {}.'.format(
+                     new_pk, filled_form.cleaned_data['name'])
+                )
+                new_form = filled_form
+                pk = new_pk
+            else:
+                note = 'That date is not available.'
+                new_form = ProjForm(instance=old_proj)
+        else:
+            note = 'Invalid form values, project not modified'
+            new_form = ProjForm(instance=old_proj)
+        return render(
+            request,
+            'modify.html',
+            {
+                'projectform': new_form,
+                'note': note,
+                'project_pk': pk
+            }
+        )
+    else:
+        note = 'Modify project'
+        try:
+            old_proj = Project.objects.get(client=request.user.id, pk=pk)
+        except Project.DoesNotExist:
+            raise Http404('Project with pk {} doesn\'t exist'.format(pk))
+        old_form = ProjForm(instance=old_proj)
+        return render(
+            request,
+            'modify.html',
+            {
+                'note': note,
+                'projectform': old_form,
+                'project_pk': pk,
+            }
+        )

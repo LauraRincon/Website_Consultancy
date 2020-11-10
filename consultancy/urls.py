@@ -31,4 +31,5 @@ urlpatterns = [
     path('new/', views.new, name='new'),
     path('', views.check, name='index'),  # Fix: route to real home page
     path('singup', views.singup, name='singup'),
+    path('modify/<int:pk>', views.modify, name='modify'),
     ]
