@@ -29,7 +29,12 @@ class ClientForm(UserCreationForm):
     class Meta(UserCreationForm):
         model = Client
         exclude = []
-        fields = UserCreationForm.Meta.fields + ('tel', 'enterprise')
+        fields = UserCreationForm.Meta.fields + (
+                'email',
+                'first_name',
+                'last_name',
+                'tel',
+                'enterprise')
         labels = {
             'tel': 'Phone Number',
             'enterprise': 'Enterprise',
