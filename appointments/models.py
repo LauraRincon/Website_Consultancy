@@ -1,5 +1,8 @@
 from django.db import models
+from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
+
+import datetime
 
 # Create your models here.
 
@@ -25,9 +28,8 @@ class Project(models.Model):
     billing = models.CharField(max_length=15, default='')
     category = models.CharField(max_length=50, choices=CATEGORY)
     # user
-    appt_date = models.DateTimeField('appointment date')
+    appt_date = models.DateTimeField('appointment')
     client = models.ForeignKey(Client, on_delete=models.CASCADE, default=None) 
 
     def __str__(self):
         return "{} - <<{}>>".format(self.name, self.appt_date)
-

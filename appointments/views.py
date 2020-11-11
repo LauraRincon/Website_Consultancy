@@ -3,9 +3,14 @@ from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView 
+from django.urls import reverse_lazy
+from datetime import datetime
+from django.utils.safestring import mark_safe
 
 from .models import Client, Project
 from .forms import ProjForm
+from .utils import Calendar
 
 
 # Create your views here.
@@ -46,6 +51,27 @@ def new(request):
                 'projectform': new_form,
             }
         )
+
+class CalendarView(ListView):
+    model = Project
+    template_name = 'calendar.html'
+    sucess_url = reverse_lazy("calendar")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        d= get_date(self.request.GET.get('month', None))
+        cal = Calendar(d.year, d.month)
+        html_cal = cal.formatmonth(withyear=True)
+        context['calendar'] = mark_safe(html_cal)
+        # context['prev_month'] = prev_month(d)
+        # context['next_month'] = next_month(d)
+        return context
+
+def get_date(req_day):
+    if req_day:
+        year,month = (int(x) for x in req_day.split('-'))
+        return date(year, month, day=1)
+    return datetime.today()
 
 @login_required
 def check(request, pk=None, id=None):
