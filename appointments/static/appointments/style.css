@@ -127,7 +127,7 @@ img {
 #adbox > div {
 	height: 520px;
 	width: 940px;
-	margin: 0 auto;
+	margin: 0;				/* RJIMENEZ CHANGE -> ORIGINAL: margin: 0 auto; */
 	padding: 0 10px;
 	position: relative;
 }
