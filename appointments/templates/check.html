@@ -1,4 +1,13 @@
 {% load widget_tweaks %}
+{% load static %}
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'appointments/css/styles.css' %}"> 
+</head>
 
 <div class="container">
     {% if user.is_authenticated %}
@@ -26,6 +35,11 @@
                 </a>
             {% endfor %}
         {% endif %}
+        <div class="container">
+        {% block content %}
+        {{ calendar }}
+        {% endblock %}
+        </div>
         <footer>
             <a href="{% url 'new'%}">Add a new project.</a>
             <a href="{% url 'logout'%}">Click here to logout.</a>
