@@ -221,3 +221,10 @@ def index(request):
         request,
         'index.html',
     )
+
+
+def logout_message(request):
+    return render(
+        request,
+        'logged_out.html'
+    )

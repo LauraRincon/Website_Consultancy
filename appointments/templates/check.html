@@ -1,44 +1,176 @@
 {% load widget_tweaks %}
+{% load static %}
+<!DOCTYPE html>
+<!-- Website template by freewebsitetemplates.com -->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Web Consultancy</title>
+	<link rel="stylesheet" href="{% static 'appointments/style.css' %}" type="text/css">
+</head>
+<body>
+	<div id="header">
+		<div>
+			<div id="logo">
+				<a href="{% url 'index' %}"><img src="{% static 'appointments/images/logo.png' %}" alt="LOGO"></a>
+			</div>
+			<ul id="navigation">
+				<li class="selected">
+					<a href="{% url 'index' %}">Home</a>
+				</li>
+				<li>
+					<a href="{% url 'check' %}">Your projects</a>
+				</li>
+				<li>
+					<a href="services.html">Modify project</a>
+				</li>
+				<li>
+					<a href="blog.html">Delete Project</a>
+				</li>
+				<li>
+					<a href="{% url 'singup' %}">Sing Up</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!-- End header -->
+	<div id="contents">
+		<div id="services">
+		<!-- CONTENT HERE -->
+		{% if user.is_authenticated %}
+			{% if object_pk and object_name %}
+				<h1>{{ object_name }}</h1>
+				<p>
+					Place: {{object_place}} <br>
+					Billing: {{object_billing}} <br>
+					Category: {{object_category}} <br>
+					Appointment: {{object_appointment}} <br>
+				</p>
 
-<div class="container">
-    {% if user.is_authenticated %}
-        <h1>Projects</h1>
-        {% if object_pk and object_name %}
-            <h2>
-                This is the page for {{object_name}}
-                with pk {{object_pk}},
-                place {{object_place}},
-                billing {{object_billing}},
-                category {{object_category}},
-                appt: {{object_appointment}}
-            </h2>
-            <form action="{% url 'delete' object_pk %}" method="POST">
-              {% csrf_token %}
-              <input type="submit" name="Delete_button" value="Delete Proyect">
-            </form>
+				<form action="{% url 'delete' object_pk %}" method="POST">
+					{% csrf_token %}
+					<input type="submit" name="Delete_button" value="Delete Proyect">
+				</form>
 
-            <form action="{% url 'modify' object_pk %}" method="GET">
-              {% csrf_token %}
-              <input type="submit" name="Mod_button" value="Modify Proyect">
-            </form>
+				<form action="{% url 'modify' object_pk %}" method="GET">
+					{% csrf_token %}
+					<input type="submit" name="Mod_button" value="Modify Proyect">
+				</form>
 
-        {% elif proj_dict %}
-            <h2>List of projects:</h2>
-            {% for name, values in proj_dict.items %}
-                <a href="{% url 'check_pj' values.uid values.pk %}">
-                    <h3>
-                        {{name}} with pk {{values.pk}},
-                        place: {{values.place}},
-                        billing: {{values.billing}},
-                        category: {{values.category}},
-                        appt : {{values.appt}}
-                    </h3>
-                </a>
-            {% endfor %}
-        {% endif %}
-        <footer>
-            <a href="{% url 'new'%}">Add a new project.</a>
-            <a href="{% url 'logout'%}">Click here to logout.</a>
-        </footer>
-    {% endif %}
-</div>
+			{% elif proj_dict %}
+				<h1>Projects and Appointments</h1>
+				<div id="main">
+					<ul>
+						{% for name, values in proj_dict.items %}
+							<li>
+								<img src="{% static 'appointments/images/project_icon.png' %}" alt="Img">
+								<a href="{% url 'check_pj' values.uid values.pk %}">
+									<h5>{{ name }}</h5>
+								</a>
+								<p>
+									Place: {{values.place}} <br>
+									Billing: {{values.billing}} <br>
+									Category: {{values.category}} <br>
+									Appointment : {{values.appt}} <br>
+								</p>
+							</li>
+						{% endfor %}
+			{% endif %}
+					</ul>
+					<a href="{% url 'new'%}">Add a new project.</a>
+					<a href="{% url 'logout'%}">Log out.</a>
+				</div>
+  {% endif %}
+			<!--
+			<div id="sidebar">
+				<h3>Services Offered</h3>
+				<ul>
+					<li class="selected">
+						<a href="services.html">Hair Color</a>
+					</li>
+					<li>
+						<a href="services.html">Hair Treatments</a>
+					</li>
+					<li>
+						<a href="services.html">Bridal and events</a>
+					</li>
+					<li>
+						<a href="services.html">Skin Treatments</a>
+					</li>
+					<li>
+						<a href="services.html">Makeup and hair</a>
+					</li>
+					<li>
+						<a href="services.html">Massage</a>
+					</li>
+					<li>
+						<a href="services.html">Nails</a>
+					</li>
+				</ul>
+			</div>
+			-->
+		</div>
+	</div>
+	<!-- FOOTER  -->
+	<div id="footer">
+		<div id="articles">
+			<div class="header">
+				<div class="body">
+					<div>
+						<div class="section">
+							<h3>About us</h3>
+							<p>
+								We are a highly proactive group in the constant search of innovativa ideas to help our clients grow.
+							</p>
+						</div>
+						<div class="section">
+							<h3>Latest Blog Posts</h3>
+							<ul class="blog">
+								<li>
+									<p>
+										<span>Posted Feb. 21, 2020</span> <a href="blog.html">Choosing The Right PV Technology</a> There's constant debate about what you need, cuting-edge tech or the cheapest.
+									</p>
+								</li>
+								<li>
+									<p>
+										<span>Posted Nov. 13, 2019</span> <a href="blog.html">Upcoming Trends In The Industry</a> Find out what ideas are booming in the international summits.
+								</li>
+							</ul>
+						</div>
+						<div class="section">
+							<h3>Contact Information</h3>
+							<table class="info">
+								<tbody>
+									<tr>
+										<td>Address:</td>
+										<td>Montes de Oca, Costa Rica</td>
+									</tr> <tr>
+										<td>Phone:</td>
+										<td>(506) 2222-2222</td>
+									</tr> <tr>
+										<td>Hours Open:</td>
+										<td>Monday - Friday: 10 am- 5pm</td>
+									</tr>
+								</tbody>
+							</table>
+							<h3>Follow us</h3>
+							<div id="connect">
+								<a href="http://freewebsitetemplates.com/go/facebook/" target="_blank" class="facebook"></a> <a href="http://freewebsitetemplates.com/go/twitter/" target="_blank" class="twitter"></a> <a href="http://freewebsitetemplates.com/go/googleplus/" target="_blank" class="googleplus"></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<form action="index.html" method="post">
+				<input type="text" value="Enter email for news" class="txtfield" onMouseUp="return false;" onFocus="this.select();">
+				<input type="submit" value="SIGNUP" class="btn">
+			</form>
+			<p>
+				© 2023 Hair Repair. All Rights Reserved. <a href="{% url 'index' %}">Privacy Policy</a> <a href="{% url 'index' %}s">Terms and Conditions</a>
+			</p>
+		</div>
+	</div>
+</body>
+</html>
