@@ -21,6 +21,16 @@
                 category {{object_category}},
                 appt: {{object_appointment}}
             </h2>
+            <form action="{% url 'delete' object_pk %}" method="POST">
+              {% csrf_token %}
+              <input type="submit" name="Delete_button" value="Delete Proyect">
+            </form>
+
+            <form action="{% url 'modify' object_pk %}" method="GET">
+              {% csrf_token %}
+              <input type="submit" name="Mod_button" value="Modify Proyect">
+            </form>
+
         {% elif proj_dict %}
             <h2>List of projects:</h2>
             {% for name, values in proj_dict.items %}

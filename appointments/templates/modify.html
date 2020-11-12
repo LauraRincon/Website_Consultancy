@@ -1,0 +1,27 @@
+{% load widget_tweaks %}
+
+<div class="container">
+    {% if user.is_authenticated %}
+        <h1>Create a new Project</h1>
+
+        <h2>{{ note }}</h2>
+
+        <form action="{% url 'modify' project_pk %}" method="POST">
+            {% csrf_token %}
+
+            {% for field in projectform %}
+            <div class="form-group">
+
+                {{ field.label_tag }}
+                {% render_field field class="form-control" %}
+
+            </div>
+            {% endfor %}
+
+            <input type="submit" vaule="Modify Project">
+        </form>
+        <footer>
+            <a href="{% url 'check' user.id %}">Back to Projects</a>
+        </footer>
+    {% endif %}
+</div>
