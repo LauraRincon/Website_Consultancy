@@ -19,7 +19,7 @@
 					<a href="{% url 'index' %}">Home</a>
 				</li>
 				<li>
-					<a href="{% url 'check' %}">Appointments</a>
+					<a href="{% url 'check' %}">Projects</a>
 				</li>
 				{% if user.is_authenticated %}
 					<li>
@@ -27,9 +27,12 @@
 					</li>
 					{% if user.is_staff %}
 					<li>
-						<a href="{% url 'singup' %}">Create user</a>
+						<a href="{% url 'singup' %}">Add user</a>
 					</li>
 					{% endif %}
+					<li>
+						<a href="{% url 'new' %}">Add Project</a>
+					</li>
 				{% else %}
 					<li>
 						<a href="{% url 'login' %}">Log In</a>

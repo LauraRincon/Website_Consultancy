@@ -19,17 +19,29 @@
 					<a href="{% url 'index' %}">Home</a>
 				</li>
 				<li>
-					<a href="{% url 'check' %}">Your projects</a>
+					<a href="{% url 'check' %}">Projects</a>
 				</li>
-				<li>
-					<a href="services.html">Modify project</a>
-				</li>
-				<li>
-					<a href="blog.html">Delete Project</a>
-				</li>
-				<li>
-					<a href="{% url 'singup' %}">Sing Up</a>
-				</li>
+				{% if user.is_authenticated %}
+					<li>
+						<a href="{% url 'logout' %}">Log Out</a>
+					</li>
+					{% if user.is_staff %}
+					<li>
+						<a href="{% url 'singup' %}">Add user</a>
+					</li>
+					{% endif %}
+					<li>
+						<a href="{% url 'new' %}">Add Project</a>
+					</li>
+				{% else %}
+					<li>
+						<a href="{% url 'login' %}">Log In</a>
+					</li>
+					<li>
+						<a href="{% url 'singup' %}">Sing Up</a>
+					</li>
+				{% endif %}
+
 			</ul>
 		</div>
 	</div>
@@ -81,8 +93,6 @@
                             </li>
                         </ul>
                         {% endfor %}
-                    <a href="{% url 'new'%}">Add a new project.</a>
-                    <a href="{% url 'logout'%}">Log out.</a>
 
                     <div class="section">
                         {% block content %}

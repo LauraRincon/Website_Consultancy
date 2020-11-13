@@ -73,7 +73,7 @@ def calendar(request, id):
 @login_required
 def check(request, pk=None, id=None):
     if request.user.is_staff and pk is None:
-        # cal = calendar(request, id)
+        cal = calendar(request, id)
         proj_dict = {}
         for proj in Project.objects.all():
             dict_name = proj.name + ": " + str(proj.client)

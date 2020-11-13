@@ -19,17 +19,29 @@
 					<a href="{% url 'index' %}">Home</a>
 				</li>
 				<li>
-					<a href="{% url 'check' %}">Your projects</a>
+					<a href="{% url 'check' %}">Projects</a>
 				</li>
-				<li>
-					<a href="services.html">Modify project</a>
-				</li>
-				<li>
-					<a href="blog.html">Delete Project</a>
-				</li>
-				<li>
-					<a href="{% url 'singup' %}">Sing Up</a>
-				</li>
+				{% if user.is_authenticated %}
+					<li>
+						<a href="{% url 'logout' %}">Log Out</a>
+					</li>
+					{% if user.is_staff %}
+					<li>
+						<a href="{% url 'singup' %}">Add user</a>
+					</li>
+					{% endif %}
+					<li>
+						<a href="{% url 'new' %}">Add Project</a>
+					</li>
+				{% else %}
+					<li>
+						<a href="{% url 'login' %}">Log In</a>
+					</li>
+					<li>
+						<a href="{% url 'singup' %}">Sing Up</a>
+					</li>
+				{% endif %}
+
 			</ul>
 		</div>
 	</div>
@@ -55,7 +67,6 @@
             {% endfor %}
 						<input type="submit" vaule="New client Object">
 				</form>
-        <a href="{% url 'check' user.id %}">Back to Projects</a>
       {% endif %}
 		</div>
 	</div>
@@ -67,7 +78,7 @@
 						<div class="section">
 							<h3>About us</h3>
 							<p>
-								This website template has been designed by <a href="http://www.freewebsitetemplates.com/">Free Website Templates</a> for you, for free. You can replace all this text with your own text. You can remove any link to our website from this website template, you're free to use this website template without linking back to us. If you're having problems editing this website template, then don't hesitate to ask for help on the <a href="http://www.freewebsitetemplates.com/forums/">Forum</a>.
+								We are a highly proactive group in the constant search of innovativa ideas to help our clients grow.
 							</p>
 						</div>
 						<div class="section">
@@ -75,13 +86,12 @@
 							<ul class="blog">
 								<li>
 									<p>
-										<span>Posted Feb. 21, 2023</span> <a href="blog.html">Choosing The Right Hair Color For You</a> Our website templates are created with inspiration, checked for quality and originality.
+										<span>Posted Feb. 21, 2020</span> <a href="blog.html">Choosing The Right PV Technology</a> There's constant debate about what you need, cuting-edge tech or the cheapest.
 									</p>
 								</li>
 								<li>
 									<p>
-										<span>Posted Feb. 20, 2023</span> <a href="blog.html">Color Trends For Spring 2023</a> What’s more, they’re absolutely free! You can do a lot with them. You can modify them.
-									</p>
+										<span>Posted Nov. 13, 2019</span> <a href="blog.html">Upcoming Trends In The Industry</a> Find out what ideas are booming in the international summits.
 								</li>
 							</ul>
 						</div>
@@ -91,13 +101,13 @@
 								<tbody>
 									<tr>
 										<td>Address:</td>
-										<td>4982 Meadowview Drive Ashburn, VA 2014</td>
+										<td>Montes de Oca, Costa Rica</td>
 									</tr> <tr>
 										<td>Phone:</td>
-										<td>540-754-4081</td>
+										<td>(506) 2222-2222</td>
 									</tr> <tr>
 										<td>Hours Open:</td>
-										<td>Tues- Sundays: 10 am- 9pm</td>
+										<td>Monday - Friday: 10 am- 5pm</td>
 									</tr>
 								</tbody>
 							</table>
@@ -112,11 +122,11 @@
 		</div>
 		<div class="footer">
 			<form action="index.html" method="post">
-				<input type="text" value="Enter email address and get 10% off" class="txtfield" onMouseUp="return false;" onFocus="this.select();">
+				<input type="text" value="Enter email for news" class="txtfield" onMouseUp="return false;" onFocus="this.select();">
 				<input type="submit" value="SIGNUP" class="btn">
 			</form>
 			<p>
-				© 2023 Hair Repair. All Rights Reserved. <a href="index.html">Privacy Policy</a> <a href="index.html">Terms and Conditions</a>
+				© 2023 Hair Repair. All Rights Reserved. <a href="{% url 'index' %}">Privacy Policy</a> <a href="{% url 'index' %}s">Terms and Conditions</a>
 			</p>
 		</div>
 	</div>
