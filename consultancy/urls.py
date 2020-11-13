@@ -19,7 +19,7 @@ from django.urls import path, include
 from appointments import views
 
 urlpatterns = [
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('django.contrib.auth.urls'), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(template_name=
          'templates/registration/logged_out.html'), name='logout1'),
     path('admin/', admin.site.urls),
@@ -31,5 +31,6 @@ urlpatterns = [
     path('new/', views.new, name='new'),
     path('', views.index, name='index'),  # Fix: route to real home page
     path('singup', views.singup, name='singup'),
-    path('modify/<int:pk>', views.modify, name='modify'),
+    path('modify/<int:pk>nder', views.modify, name='modify'),
+    path('about', views.about, name='about'),
     ]
