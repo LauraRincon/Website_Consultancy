@@ -71,7 +71,7 @@ def calendar(request, id):
 def check(request, pk=None, id=None):
     if id == request.user.id:
         client = Client.objects.get(pk=id)
-        cal= calendar(request,id)
+        
         if pk:
             try:
                 proj = Project.objects.get(client=client, pk=pk)
@@ -90,6 +90,7 @@ def check(request, pk=None, id=None):
                 }
             )
         else:
+            cal= calendar(request,id)
             proj_dict = {}
             for proj in client.project_set.all():
                 proj_dict[proj.name] = {
@@ -227,4 +228,11 @@ def index(request):
     return render(
         request,
         'index.html',
+    )
+
+
+def logout_message(request):
+    return render(
+        request,
+        'logged_out.html'
     )
