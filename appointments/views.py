@@ -21,7 +21,7 @@ def new(request):
             new_proj = filled_form.save(commit=False)
 
             dateAvailable = True
-            for project in Project.objects.all():
+            for project in Project.objeaccounts/logout/accounts/logout/cts.all():
                 if project.appt_date == new_proj.appt_date:
                     dateAvailable = False
                     break
@@ -137,6 +137,15 @@ def singup(request):
             filled_form.save()
             note = "Your registry was succesful! Please go back to the \
                     homepage and log in"
+            staff = request.POST.get("staff")
+            if staff:
+                new_user = Client.objects.get(
+                    username=request.POST.get('username'))
+                print(new_user)
+                print(new_user.is_staff)
+                new_user.is_staff = True
+                new_user.save()
+                print(new_user.is_staff)
         else:
             note = 'Invalid form values, no user created'
         return render(
@@ -235,4 +244,11 @@ def logout_message(request):
     return render(
         request,
         'logged_out.html'
+    )
+
+
+def about(request):
+    return render(
+        request,
+        'about.html'
     )

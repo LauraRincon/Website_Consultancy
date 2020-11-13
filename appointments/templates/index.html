@@ -1,3 +1,4 @@
+{% load widget_tweaks %}
 {% load static %}
 <!DOCTYPE html>
 <!-- Website template by freewebsitetemplates.com -->
@@ -18,17 +19,26 @@
 					<a href="{% url 'index' %}">Home</a>
 				</li>
 				<li>
-					<a href="{% url 'check' %}">Your projects</a>
+					<a href="{% url 'check' %}">Appointments</a>
 				</li>
-				<li>
-					<a href="services.html">Modify project</a>
-				</li>
-				<li>
-					<a href="blog.html">Delete Project</a>
-				</li>
-				<li>
-					<a href="{% url 'singup' %}">Sing Up</a>
-				</li>
+				{% if user.is_authenticated %}
+					<li>
+						<a href="{% url 'logout' %}">Log Out</a>
+					</li>
+					{% if user.is_staff %}
+					<li>
+						<a href="{% url 'singup' %}">Create user</a>
+					</li>
+					{% endif %}
+				{% else %}
+					<li>
+						<a href="{% url 'login' %}">Log In</a>
+					</li>
+					<li>
+						<a href="{% url 'singup' %}">Sing Up</a>
+					</li>
+				{% endif %}
+
 			</ul>
 		</div>
 	</div>
@@ -38,7 +48,7 @@
 			<div>
 				<img src="{% static 'appointments/images/eng_appointment.png' %}" alt="Img" id="img-index">
 				<div class="details">
-					<h3>We Bring your proyect to life...</h3>
+					<h3>We Bring your proyects to life...</h3>
 					<a href="{% url 'new' %}">Set An Appointment Now</a>
 				</div>
 			</div>

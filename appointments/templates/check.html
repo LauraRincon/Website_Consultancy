@@ -75,17 +75,14 @@
                             </li>
                         </ul>
                         {% endfor %}
-					<a href="{% url 'new'%}">Add a new project.</a>
+                    <a href="{% url 'new'%}">Add a new project.</a>
                     <a href="{% url 'logout'%}">Log out.</a>
                     
                     <div class="section">
                         {% block content %}
                             {{ calendar }} 
-                        {% end content %}
+                        {% endblock content %}
                     </div>
-                    
-
-
                 </div>
             {% endif %}
         {% endif %}

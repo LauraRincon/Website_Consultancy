@@ -51,6 +51,10 @@
 
 					</div>
 					{% endfor %}
+					{% if user.is_staff %}
+					<input type=checkbox id="staff" name="staff" value="True">
+						<label for="staff">This user will be staff</label><br>
+					{% endif %}
 					<input type="submit" vaule="New client Object">
 			</form>
 		</div>
