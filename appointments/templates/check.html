@@ -45,6 +45,9 @@
 					Billing: {{object_billing}} <br>
 					Category: {{object_category}} <br>
 					Appointment: {{object_appointment}} <br>
+					{% if user.is_staff %}
+						Client: {{object_client}}<br>
+					{% endif %}
 				</p>
 
 				<form action="{% url 'delete' object_pk %}" method="POST">
@@ -59,8 +62,8 @@
 			{% elif proj_dict %}
 				<h1>Projects and Appointments</h1>
 				<div id="main">
-                        {% for name, values in proj_dict.items %}
-                        <ul>
+          {% for name, values in proj_dict.items %}
+            <ul>
 							<li>
 								<img src="{% static 'appointments/images/project_icon.png' %}" alt="Img">
 								<a href="{% url 'check_pj' values.uid values.pk %}">
@@ -71,16 +74,19 @@
 									Billing: {{values.billing}} <br>
 									Category: {{values.category}} <br>
 									Appointment : {{values.appt}} <br>
+									{% if user.is_staff %}
+										Client: {{values.client}}<br>
+									{% endif %}
 								</p>
                             </li>
                         </ul>
                         {% endfor %}
                     <a href="{% url 'new'%}">Add a new project.</a>
                     <a href="{% url 'logout'%}">Log out.</a>
-                    
+
                     <div class="section">
                         {% block content %}
-                            {{ calendar }} 
+                            {{ calendar }}
                         {% endblock content %}
                     </div>
                 </div>
