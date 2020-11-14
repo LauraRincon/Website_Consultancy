@@ -24,6 +24,7 @@ img {
 
 #img-index{
 	height: 400px;
+	padding: 100px 0px 100px 200px;
 }
 /*------------------------------ HEADER ------------------------------*/
 #navigation li a, #contact form input.btn {
@@ -93,6 +94,10 @@ img {
 	margin: 0 auto;
 	padding-top: 30px;
 }
+#calendar {
+	display: block;
+	margin: 150px 0px;
+}
 #contents h1, h3, h5 {
 	color: #836544;
 	font-family: 'Caudex-Regular';
@@ -103,13 +108,7 @@ img {
 #contents h5 {
 	color: #474747;
 }
-#contents p {
-	color: #474747;
-	font-size: 13px;
-	line-height: 24px;
-	margin: 0;
-	padding: 0 0 24px;
-}
+
 #contents p a {
 	color: #474747;
 }
@@ -170,6 +169,9 @@ img {
 	bottom: -72px;
 	left: 0;
 }
+
+
+
 /** Featured **/
 #featured {
 	padding: 18px 0;
@@ -588,9 +590,9 @@ img {
 }
 
 .table {
-	width: 100%;
+	width: 60%;
 	color: #212529;
-  }
+}
 
 .table-bordered {
 	border: 1px solid #836544;
@@ -604,16 +606,27 @@ img {
   .table-bordered thead th,
   .table-bordered thead td {
 	 border-bottom-width: 2px; 
+	 height: min-content;
   }
 
-  @media (max-width: 575.98px) {
-	.table-responsive-sm {
-	  display: block;
-	  width: 100%;
-	  overflow-x: auto;
-	  -webkit-overflow-scrolling: touch;
-	}
-	.table-responsive-sm > .table-bordered {
-	  border: 0;
-	}
-  }
+  .table-success{
+	background-color: #6d773a;
+	color: seashell;
+	height: min-content;
+}
+
+
+
+#contents p {
+	color: #474747;
+	font-size: 13px;
+	line-height: 24px;
+	margin: 0;
+	padding: 0 0 24px;
+}
+
+p#table{
+	background-color: #6d773a;
+	color: seashell;
+	height: min-content;
+}

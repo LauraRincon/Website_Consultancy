@@ -21,7 +21,7 @@ def new(request):
             new_proj = filled_form.save(commit=False)
 
             dateAvailable = True
-            for project in Project.objeaccounts/logout/accounts/logout/cts.all():
+            for project in Project.objects.all():
                 if project.appt_date == new_proj.appt_date:
                     dateAvailable = False
                     break
@@ -59,6 +59,16 @@ def new(request):
             }
         )
 
+
+@login_required
+def calendar(request, id):
+    date = datetime.today()
+    cal = Calendar(id, date.year, date.month)
+    html_cal = cal.formatmonth(id, withyear=True)
+    context = mark_safe(html_cal)
+    return context
+
+
 @login_required
 def calendar(request, id):
     date = datetime.today()
@@ -69,52 +79,74 @@ def calendar(request, id):
 
 @login_required
 def check(request, pk=None, id=None):
-    if id == request.user.id:
-        client = Client.objects.get(pk=id)
-        
-        if pk:
-            try:
-                proj = Project.objects.get(client=client, pk=pk)
-            except Project.DoesNotExist:
-                raise Http404('Project with pk {} doesn\'t exist'.format(pk))
-            return render(
-                request,
-                'check.html',
-                {
-                    'object_pk': proj.pk,
-                    'object_name': proj.name,
-                    'object_place': proj.place,
-                    'object_billing': proj.billing,
-                    'object_category': proj.category,
-                    'object_appointment': proj.appt_date,
-                }
-            )
-        else:
-            cal= calendar(request,id)
-            proj_dict = {}
-            for proj in client.project_set.all():
-                proj_dict[proj.name] = {
-                    'pk': proj.pk,
-                    'place': proj.place,
-                    'billing': proj.billing,
-                    'category': proj.category,
-                    'appt': proj.appt_date,
-                    'uid': id
-                }
-            return render(
-                request,
-                'check.html',
-                {
-                    'proj_dict': proj_dict,
-                    'calendar': cal,
-                }
-            )
+    if request.user.is_staff and pk is None:
+        cal = calendar(request, id)
+        proj_dict = {}
+        for proj in Project.objects.all():
+            dict_name = proj.name + ": " + str(proj.client)
+            proj_dict[dict_name] = {
+                'pk': proj.pk,
+                'place': proj.place,
+                'billing': proj.billing,
+                'category': proj.category,
+                'appt': proj.appt_date,
+                'uid': proj.client.pk,
+                'client': proj.client,
+            }
+        return render(
+            request,
+            'check.html',
+            {
+                'proj_dict': proj_dict,
+            }
+        )
     else:
-        client = Client.objects.get(pk=request.user.id)
-        base_url = '/check/'
-        query_string = urlencode({'id': (client.pk)})
-        url = '{}{}'.format(base_url, query_string)
-        return HttpResponseRedirect(url)
+        if id == request.user.id or request.user.is_staff:
+            client = Client.objects.get(pk=id)
+
+            if pk:
+                try:
+                    proj = Project.objects.get(client=client, pk=pk)
+                except Project.DoesNotExist:
+                    raise Http404(
+                        'Project with pk {} doesn\'t exist'.format(pk))
+                return render(
+                    request,
+                    'check.html',
+                    {
+                        'object_pk': proj.pk,
+                        'object_name': proj.name,
+                        'object_place': proj.place,
+                        'object_billing': proj.billing,
+                        'object_category': proj.category,
+                        'object_appointment': proj.appt_date,
+                        'object_client': proj.client,
+                    }
+                )
+            else:
+                proj_dict = {}
+                for proj in client.project_set.all():
+                    proj_dict[proj.name] = {
+                        'pk': proj.pk,
+                        'place': proj.place,
+                        'billing': proj.billing,
+                        'category': proj.category,
+                        'appt': proj.appt_date,
+                        'uid': id
+                    }
+                return render(
+                    request,
+                    'check.html',
+                    {
+                        'proj_dict': proj_dict,
+                    }
+                )
+        else:
+            client = Client.objects.get(pk=request.user.id)
+            base_url = '/check/'
+            query_string = urlencode({'id': (client.pk)})
+            url = '{}{}'.format(base_url, query_string)
+            return HttpResponseRedirect(url)
 
 
 def delete(request, pk=None):
@@ -172,10 +204,14 @@ def singup(request):
 @login_required
 def modify(request, pk=None):
     note = ''
+    cal = calendar(request, request.user.id)
     if request.method == 'POST':
         filled_form = ProjForm(request.POST)
         try:
-            old_proj = Project.objects.get(client=request.user.id, pk=pk)
+            if request.user.is_staff:
+                old_proj = Project.objects.get(pk=pk)
+            else:
+                old_proj = Project.objects.get(client=request.user.id, pk=pk)
         except Project.DoesNotExist:
             raise Http404('Project with pk {} doesn\'t exist'.format(pk))
         if filled_form.is_valid():
@@ -210,15 +246,19 @@ def modify(request, pk=None):
             request,
             'modify.html',
             {
+                'calendar': cal,
                 'projectform': new_form,
                 'note': note,
-                'project_pk': pk
+                'project_pk': pk,
             }
         )
     else:
-        note = 'Modify project'
+        note = ''
         try:
-            old_proj = Project.objects.get(client=request.user.id, pk=pk)
+            if request.user.is_staff:
+                old_proj = Project.objects.get(pk=pk)
+            else:
+                old_proj = Project.objects.get(client=request.user.id, pk=pk)
         except Project.DoesNotExist:
             raise Http404('Project with pk {} doesn\'t exist'.format(pk))
         old_form = ProjForm(instance=old_proj)
@@ -226,6 +266,7 @@ def modify(request, pk=None):
             request,
             'modify.html',
             {
+                'calendar': cal,
                 'note': note,
                 'projectform': old_form,
                 'project_pk': pk,
@@ -246,9 +287,3 @@ def logout_message(request):
         'logged_out.html'
     )
 
-
-def about(request):
-    return render(
-        request,
-        'about.html'
-    )

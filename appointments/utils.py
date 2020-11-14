@@ -13,10 +13,10 @@ class Calendar(HTMLCalendar):
         events_per_day = Project.objects.filter(client__id= self.id, appt_date__day=day)
         d = ''
         for event in events_per_day:
-            d = f'<p>reserved</p>'
+            d = f'reserved'
         if day != 0:
             if d:
-                return f"<td class='table-primary'>{day}<span> {d} </span></td>"
+                return f"<td class='table-success'>{day}\n <p id='table'> {d} </p></td>" #'
             else:
                 return f"<td>{day}</td>"
         return f'<td> </td>'
@@ -29,14 +29,14 @@ class Calendar(HTMLCalendar):
     
     def formatmonth(self, id, withyear=True):
         events = Project.objects.filter(client__id= self.id, appt_date__year=self.year, appt_date__month=self.month)
-        cal =  "<div class='table-responsive-sm'>\n"
-        cal += f"<table class='table table-bordered'>\n" #f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
+        cal =  "<div>\n" 
+        cal += f"<table class='table table-bordered'>\n"
 
         cal += f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
         cal += f'{self.formatweekheader()}\n'
         for week in self.monthdays2calendar(self.year, self.month):
             cal += f'{self.formatweek(id, week, events)}\n'
-        cal +=  "\n</div>"
+        cal +=  "</tdbody>\n</table>\n</div>\n"
         return cal
 
 
