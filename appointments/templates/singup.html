@@ -45,66 +45,32 @@
 			</ul>
 		</div>
 	</div>
-	<!-- End header -->
 	<div id="contents">
-		<div id="services">
-		<!-- CONTENT HERE -->
-		{% if user.is_authenticated %}
-			{% if object_pk and object_name %}
-				<h1>{{ object_name }}</h1>
-				<p>
-					Place: {{object_place}} <br>
-					Billing: {{object_billing}} <br>
-					Category: {{object_category}} <br>
-					Appointment: {{object_appointment}} <br>
+		<div id="contact">
+			<h1>Sing Up</h1>
+			<h2>{{ note }}</h2>
+			<img src="{% static 'appointments/images/telephone.png' %}" alt="Img">
+			<p>
+				This website template has been designed by <a href="http://www.freewebsitetemplates.com/">Free Website Templates</a> for you, for free. You can replace all this text with your own text. You can remove any link to our website from this website template, you're free to use this website template without linking back to us. If you're having problems editing this website template, then don't hesitate to ask for help on the <a href="http://www.freewebsitetemplates.com/forums/">Forum</a>.
+			</p>
+			<form action="{% url 'singup' %}" method="POST">
+					{% csrf_token %}
+					{% for field in clientform %}
+					<div class="form-group">
+
+							{{ field.label_tag }}
+							{% render_field field class="form-control" %}
+
+					</div>
+					{% endfor %}
 					{% if user.is_staff %}
-						Client: {{object_client}}<br>
+					<input type=checkbox id="staff" name="staff" value="True">
+						<label for="staff">This user will be staff</label><br>
 					{% endif %}
-				</p>
-
-				<form action="{% url 'delete' object_pk %}" method="POST">
-					{% csrf_token %}
-					<input type="submit" name="Delete_button" value="Delete Proyect">
-				</form>
-
-				<form action="{% url 'modify' object_pk %}" method="GET">
-					{% csrf_token %}
-					<input type="submit" name="Mod_button" value="Modify Proyect">
-				</form>
-			{% elif proj_dict %}
-				<h1>Projects and Appointments</h1>
-				<div id="main">
-          {% for name, values in proj_dict.items %}
-            <ul>
-							<li>
-								<img src="{% static 'appointments/images/project_icon.png' %}" alt="Img">
-								<a href="{% url 'check_pj' values.uid values.pk %}">
-									<h5>{{ name }}</h5>
-								</a>
-								<p>
-									Place: {{values.place}} <br>
-									Billing: {{values.billing}} <br>
-									Category: {{values.category}} <br>
-									Appointment : {{values.appt}} <br>
-									{% if user.is_staff %}
-										Client: {{values.client}}<br>
-									{% endif %}
-								</p>
-                            </li>
-                        </ul>
-                        {% endfor %}
-
-                    <div class="section">
-                        {% block content %}
-                            {{ calendar }}
-                        {% endblock content %}
-                    </div>
-                </div>
-            {% endif %}
-        {% endif %}
+					<input type="submit" vaule="New client Object">
+			</form>
 		</div>
-    </div>
-	<!-- FOOTER  -->
+	</div>
 	<div id="footer">
 		<div id="articles">
 			<div class="header">
