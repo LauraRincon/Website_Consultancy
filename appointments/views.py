@@ -11,6 +11,51 @@ from .forms import ProjForm, ClientForm, StaffProjForm
 from .utils import Calendar
 
 # Create your views here.
+def index(request):
+    return render(
+        request,
+        'index.html',
+    )
+
+def singup(request):
+    new_form = ClientForm()
+    if request.method == 'POST':
+        filled_form = ClientForm(request.POST)
+        if filled_form.is_valid():
+            filled_form.save()
+            note = "Your registry was succesful! Please go back to the \
+                    homepage and log in"
+            staff = request.POST.get("staff")
+            if staff:
+                new_user = Client.objects.get(
+                    username=request.POST.get('username'))
+                print(new_user)
+                print(new_user.is_staff)
+                new_user.is_staff = True
+                new_user.save()
+                print(new_user.is_staff)
+        else:
+            note = 'Invalid form values, no user created'
+        return render(
+            request,
+            'singup.html',
+            {
+                'clientform': new_form,
+                'note': note,
+                'formErrors': filled_form.errors.as_data()
+            }
+        )
+    else:
+        note = ' '
+        return render(
+            request,
+            'singup.html',
+            {
+                'note': note,
+                'clientform': new_form,
+            }
+        )
+
 @login_required
 def new(request):
     cal = calendar(request)
@@ -73,7 +118,6 @@ def new(request):
                 'calendar': cal,
             }
         )
-
 
 @login_required
 def calendar(request):
@@ -153,7 +197,7 @@ def check(request, pk=None, id=None):
             url = '{}{}'.format(base_url, query_string)
             return HttpResponseRedirect(url)
 
-
+@login_required
 def delete(request, pk=None):
     if pk is not None and request.method == 'POST':
         proj = Project.objects.get(pk=pk)
@@ -164,47 +208,6 @@ def delete(request, pk=None):
             request,
             'delete.html'
         )
-
-
-def singup(request):
-    new_form = ClientForm()
-    if request.method == 'POST':
-        filled_form = ClientForm(request.POST)
-        if filled_form.is_valid():
-            filled_form.save()
-            note = "Your registry was succesful! Please go back to the \
-                    homepage and log in"
-            staff = request.POST.get("staff")
-            if staff:
-                new_user = Client.objects.get(
-                    username=request.POST.get('username'))
-                print(new_user)
-                print(new_user.is_staff)
-                new_user.is_staff = True
-                new_user.save()
-                print(new_user.is_staff)
-        else:
-            note = 'Invalid form values, no user created'
-        return render(
-            request,
-            'singup.html',
-            {
-                'clientform': new_form,
-                'note': note,
-                'formErrors': filled_form.errors.as_data()
-            }
-        )
-    else:
-        note = ' '
-        return render(
-            request,
-            'singup.html',
-            {
-                'note': note,
-                'clientform': new_form,
-            }
-        )
-
 
 @login_required
 def modify(request, pk=None):
@@ -279,16 +282,5 @@ def modify(request, pk=None):
         )
 
 
-def index(request):
-    return render(
-        request,
-        'index.html',
-    )
 
-
-def logout_message(request):
-    return render(
-        request,
-        'logged_out.html'
-    )
 
