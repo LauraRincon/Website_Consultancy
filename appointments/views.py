@@ -9,7 +9,6 @@ from .models import Client, Project
 from .forms import ProjForm, ClientForm
 from .utils import Calendar
 
-
 # Create your views here.
 def index(request):
     return render(
@@ -98,7 +97,7 @@ def new(request):
             note = 'Invalid form values, no project created'
 
         return render(
-            request,
+            request,       
             'new.html',
             {
                 'projectform': new_form,
