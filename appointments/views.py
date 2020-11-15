@@ -9,11 +9,56 @@ from .models import Client, Project
 from .forms import ProjForm, ClientForm
 from .utils import Calendar
 
-
 # Create your views here.
+def index(request):
+    return render(
+        request,
+        'index.html',
+    )
+
+def singup(request):
+    new_form = ClientForm()
+    if request.method == 'POST':
+        filled_form = ClientForm(request.POST)
+        if filled_form.is_valid():
+            filled_form.save()
+            note = "Your registry was succesful! Please go back to the \
+                    homepage and log in"
+            staff = request.POST.get("staff")
+            if staff:
+                new_user = Client.objects.get(
+                    username=request.POST.get('username'))
+                print(new_user)
+                print(new_user.is_staff)
+                new_user.is_staff = True
+                new_user.save()
+                print(new_user.is_staff)
+        else:
+            note = 'Invalid form values, no user created'
+        return render(
+            request,
+            'singup.html',
+            {
+                'clientform': new_form,
+                'note': note,
+                'formErrors': filled_form.errors.as_data()
+            }
+        )
+    else:
+        note = ' '
+        return render(
+            request,
+            'singup.html',
+            {
+                'note': note,
+                'clientform': new_form,
+            }
+        )
+
 @login_required
 def new(request):
     new_form = ProjForm()
+    cal = calendar(request)
     choices = []
     for user in Client.objects.filter(is_staff=False):
         choices.append(user)
@@ -57,6 +102,7 @@ def new(request):
             {
                 'projectform': new_form,
                 'note': note,
+                'calendar': cal,
                 'choices': choices,
             }
         )
@@ -68,19 +114,18 @@ def new(request):
             {
                 'note': note,
                 'projectform': new_form,
+                'calendar': cal,
                 'choices': choices,
             }
         )
 
-
 @login_required
-def calendar(request, id):
+def calendar(request):
     date = datetime.today()
-    cal = Calendar(id, date.year, date.month)
-    html_cal = cal.formatmonth(id, withyear=True)
+    cal = Calendar(date.year, date.month)
+    html_cal = cal.formatmonth(withyear=True)
     context = mark_safe(html_cal)
     return context
-
 
 @login_required
 def check(request, pk=None, id=None):
@@ -152,7 +197,7 @@ def check(request, pk=None, id=None):
             url = '{}{}'.format(base_url, query_string)
             return HttpResponseRedirect(url)
 
-
+@login_required
 def delete(request, pk=None):
     if pk is not None and request.method == 'POST':
         proj = Project.objects.get(pk=pk)
@@ -164,51 +209,10 @@ def delete(request, pk=None):
             'delete.html'
         )
 
-
-def singup(request):
-    new_form = ClientForm()
-    if request.method == 'POST':
-        filled_form = ClientForm(request.POST)
-        if filled_form.is_valid():
-            filled_form.save()
-            note = "Your registry was succesful! Please go back to the \
-                    homepage and log in"
-            staff = request.POST.get("staff")
-            if staff:
-                new_user = Client.objects.get(
-                    username=request.POST.get('username'))
-                print(new_user)
-                print(new_user.is_staff)
-                new_user.is_staff = True
-                new_user.save()
-                print(new_user.is_staff)
-        else:
-            note = 'Invalid form values, no user created'
-        return render(
-            request,
-            'singup.html',
-            {
-                'clientform': new_form,
-                'note': note,
-                'formErrors': filled_form.errors.as_data()
-            }
-        )
-    else:
-        note = 'Regiter your user'
-        return render(
-            request,
-            'singup.html',
-            {
-                'note': note,
-                'clientform': new_form,
-            }
-        )
-
-
 @login_required
 def modify(request, pk=None):
     note = ''
-    cal = calendar(request, request.user.id)
+    cal = calendar(request)
     if request.method == 'POST':
         filled_form = ProjForm(request.POST)
         try:
@@ -276,17 +280,3 @@ def modify(request, pk=None):
                 'project_pk': pk,
             }
         )
-
-
-def index(request):
-    return render(
-        request,
-        'index.html',
-    )
-
-
-def logout_message(request):
-    return render(
-        request,
-        'logged_out.html'
-    )

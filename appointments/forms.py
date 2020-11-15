@@ -23,7 +23,6 @@ class ProjForm(forms.ModelForm):
             'appt_date': 'Appointment date',
         }
 
-
 class ClientForm(UserCreationForm):
 
     class Meta(UserCreationForm):

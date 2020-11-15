@@ -42,8 +42,6 @@
 	<!-- End header -->
 	<div id="contents">
 		<div id="services">
-		<!-- CONTENT HERE -->
-		
 		{% if user.is_authenticated %}
 		<h1>Projects and Appointments</h1>
 			{% if object_pk and object_name %}
@@ -69,8 +67,8 @@
 				</form>
 			{% elif proj_dict %}
 				<div id="main">
-          {% for name, values in proj_dict.items %}
-            <ul>
+					{% for name, values in proj_dict.items %}
+            			<ul>
 							<li>
 								<img src="{% static 'appointments/images/project_icon.png' %}" alt="Img">
 								<a href="{% url 'check_pj' values.uid values.pk %}">
@@ -87,7 +85,7 @@
 								</p>
                             </li>
                         </ul>
-                        {% endfor %}
+					{% endfor %}
                 </div>
             {% endif %}
         {% endif %}
