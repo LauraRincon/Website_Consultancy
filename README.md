@@ -1,8 +1,8 @@
 # Website_Consultancy
-## Proyecto 2
+**Proyecto**
 Página web para calendarizar citas para proyectos de consultoría. La página permite la creación de usuarios (administrativo y usuario normal) y que cada uno de ellos pueda obtener citas únicas, revisarlas, y eliminarlas.
 
-## Integrantes
+**Integrantes**
 * Ricardo Jiménez Anchía
 * Laura Rincón Riveros
 
