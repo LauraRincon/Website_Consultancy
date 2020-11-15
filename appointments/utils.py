@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from calendar import HTMLCalendar
-from .models import Project
+from .models import Project, Client
 
 class Calendar(HTMLCalendar):
     def __init__(self, id=None, year=None, month=None):
@@ -10,7 +10,11 @@ class Calendar(HTMLCalendar):
         super(Calendar,self).__init__()
 
     def formatday(self, id, day, events):
-        events_per_day = Project.objects.filter(client__id= self.id, appt_date__day=day)
+        user = Client.objects.get(id= self.id)
+        if user.is_staff or user.is_superuser:
+            events_per_day = Project.objects.filter(appt_date__day=day)
+        else:
+            events_per_day = Project.objects.filter(client__id= self.id, appt_date__day=day)
         d = ''
         for event in events_per_day:
             d = f'reserved'

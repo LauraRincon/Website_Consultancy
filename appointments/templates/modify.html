@@ -17,7 +17,7 @@
 				</li>
 				{% if user.is_authenticated %}
 					<li>
-						<a href="{% url 'logout' %}">Log Out</a>
+						<a href="{% url 'new' %}">Add Project</a>
 					</li>
 					{% if user.is_staff %}
 					<li>
@@ -25,7 +25,7 @@
 					</li>
 					{% endif %}
 					<li>
-						<a href="{% url 'new' %}">Add Project</a>
+						<a href="{% url 'logout' %}">Log Out</a>
 					</li>
 				{% else %}
 					<li>

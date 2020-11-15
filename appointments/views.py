@@ -7,41 +7,54 @@ from datetime import datetime
 from django.utils.safestring import mark_safe
 
 from .models import Client, Project
-from .forms import ProjForm, ClientForm
+from .forms import ProjForm, ClientForm, AdminProjForm
 from .utils import Calendar
 
 # Create your views here.
 @login_required
 def new(request):
-    new_form = ProjForm()
+    new_form = AdminProjForm() if request.user.is_superuser else ProjForm()
     if request.method == 'POST':
-        filled_form = ProjForm(request.POST)
-        if filled_form.is_valid():
-            user = Client.objects.get(id=request.user.id)
-            new_proj = filled_form.save(commit=False)
-
-            dateAvailable = True
-            for project in Project.objects.all():
-                if project.appt_date == new_proj.appt_date:
-                    dateAvailable = False
-                    break
-
-            if dateAvailable:
-                new_proj.client = user
-                new_proj.save()
-                new_pk = new_proj.pk
-                note = (
-                    'Project object with pk \'{}\' was successfully created,\n'
-                    'Name: {}.'.format(
-                        new_pk, filled_form.cleaned_data['name']
-                        )
-                )
+        new_proj = None
+        user = None
+        if request.user.is_superuser:
+            filled_form = AdminProjForm(request.POST)
+            if filled_form.is_valid():
+                client = request.POST.get("client")
+                print(client)
+                user = Client.objects.get(id= client)
+                new_proj = filled_form.save(commit=False)
             else:
-                note = 'That date is not available.'
+                note = 'Invalid form values, no project created'
         else:
-            note = 'Invalid form values, no project created'
+            filled_form = ProjForm(request.POST)
+            if filled_form.is_valid():
+                user = Client.objects.get(id=request.user.id)
+                new_proj = filled_form.save(commit=False)
+            else:
+                note = 'Invalid form values, no project created'
+
+        dateAvailable = True
+        for project in Project.objects.filter(client__id= user.id):
+            if new_proj and project.appt_date == new_proj.appt_date:
+                dateAvailable = False
+                break
+
+        if dateAvailable and user:
+            new_proj.client = user
+            new_proj.save()
+            new_pk = new_proj.pk
+            note = (
+                'Project object with pk \'{}\' was successfully created,\n'
+                'Name: {}.'.format(
+                    new_pk, filled_form.cleaned_data['name']
+                    )
+            )
+        else:
+            note = 'That date is not available.'
+
         return render(
-            request,
+            request,       
             'new.html',
             {
                 'projectform': new_form,
@@ -80,7 +93,6 @@ def calendar(request, id):
 @login_required
 def check(request, pk=None, id=None):
     if request.user.is_staff and pk is None:
-        cal = calendar(request, id)
         proj_dict = {}
         for proj in Project.objects.all():
             dict_name = proj.name + ": " + str(proj.client)

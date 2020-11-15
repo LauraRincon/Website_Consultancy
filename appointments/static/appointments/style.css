@@ -22,10 +22,11 @@ img {
 	border: 0;
 }
 
-#img-index{
+img#img-index{
 	height: 400px;
 	padding: 100px 0px 100px 200px;
 }
+
 /*------------------------------ HEADER ------------------------------*/
 #navigation li a, #contact form input.btn {
 	background: url("images/buttons.png") no-repeat;
@@ -629,4 +630,11 @@ p#table{
 	background-color: #6d773a;
 	color: seashell;
 	height: min-content;
+}
+
+
+img#img-login{
+	float: left;
+	height: 300px;
+	margin: 6px 50px 6px 0px;
 }
