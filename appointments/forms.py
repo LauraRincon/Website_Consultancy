@@ -23,16 +23,6 @@ class ProjForm(forms.ModelForm):
             'appt_date': 'Appointment date',
         }
 
-class AdminProjForm(ProjForm):
-    choices = ()
-    for user in Client.objects.filter(is_superuser=False):
-        print("getting usernames\n")
-        choices += ((user.id, user.username),)
-    client = forms.ChoiceField(choices=choices)
-
-
-    class Meta(ProjForm.Meta):
-        fields = ProjForm.Meta.fields + ['client',]
 
 class ClientForm(UserCreationForm):
 

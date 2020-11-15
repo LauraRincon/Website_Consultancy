@@ -1,64 +1,63 @@
 from urllib.parse import urlencode
 from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponseRedirect
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from django.utils.safestring import mark_safe
 
 from .models import Client, Project
-from .forms import ProjForm, ClientForm, AdminProjForm
+from .forms import ProjForm, ClientForm
 from .utils import Calendar
+
 
 # Create your views here.
 @login_required
 def new(request):
-    new_form = AdminProjForm() if request.user.is_superuser else ProjForm()
+    new_form = ProjForm()
+    choices = []
+    for user in Client.objects.filter(is_staff=False):
+        choices.append(user)
+
     if request.method == 'POST':
-        new_proj = None
-        user = None
-        if request.user.is_superuser:
-            filled_form = AdminProjForm(request.POST)
-            if filled_form.is_valid():
-                client = request.POST.get("client")
-                print(client)
-                user = Client.objects.get(id= client)
-                new_proj = filled_form.save(commit=False)
+
+        filled_form = ProjForm(request.POST)
+        if filled_form.is_valid():
+            if request.user.is_staff:
+                user = Client.objects.get(
+                    id=request.POST.get('username_choice'))
             else:
-                note = 'Invalid form values, no project created'
-        else:
-            filled_form = ProjForm(request.POST)
-            if filled_form.is_valid():
                 user = Client.objects.get(id=request.user.id)
-                new_proj = filled_form.save(commit=False)
+
+            new_proj = filled_form.save(commit=False)
+            dateAvailable = True
+            for project in Project.objects.all():
+                if project.appt_date == new_proj.appt_date:
+                    dateAvailable = False
+                    break
+
+            if dateAvailable:
+                new_proj.client = user
+                new_proj.save()
+                new_pk = new_proj.pk
+                note = (
+                    'Project object with pk \'{}\' was successfully created,\n'
+                    'Name: {}.'.format(
+                        new_pk, filled_form.cleaned_data['name']
+                        )
+                )
+
             else:
-                note = 'Invalid form values, no project created'
-
-        dateAvailable = True
-        for project in Project.objects.filter(client__id= user.id):
-            if new_proj and project.appt_date == new_proj.appt_date:
-                dateAvailable = False
-                break
-
-        if dateAvailable and user:
-            new_proj.client = user
-            new_proj.save()
-            new_pk = new_proj.pk
-            note = (
-                'Project object with pk \'{}\' was successfully created,\n'
-                'Name: {}.'.format(
-                    new_pk, filled_form.cleaned_data['name']
-                    )
-            )
+                note = 'That date is not available.'
         else:
-            note = 'That date is not available.'
+            note = 'Invalid form values, no project created'
 
         return render(
-            request,       
+            request,
             'new.html',
             {
                 'projectform': new_form,
                 'note': note,
+                'choices': choices,
             }
         )
     else:
@@ -69,6 +68,7 @@ def new(request):
             {
                 'note': note,
                 'projectform': new_form,
+                'choices': choices,
             }
         )
 
@@ -81,14 +81,6 @@ def calendar(request, id):
     context = mark_safe(html_cal)
     return context
 
-
-@login_required
-def calendar(request, id):
-    date = datetime.today()
-    cal = Calendar(id, date.year, date.month)
-    html_cal = cal.formatmonth(id, withyear=True)
-    context = mark_safe(html_cal)
-    return context
 
 @login_required
 def check(request, pk=None, id=None):
@@ -298,4 +290,3 @@ def logout_message(request):
         request,
         'logged_out.html'
     )
-
