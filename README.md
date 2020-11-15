@@ -7,18 +7,18 @@ Página web para calendarizar citas para proyectos de consultoría. La página p
 * Laura Rincón Riveros
 
 # Compilación
-Las siguientes instrucciones son necesarias para la creación de la imagen en docker y la execución de la página:
-* build using:	 
+Las siguientes instrucciones son necesarias para la creación de la imagen en Docker y la ejecución de la página:
+* compilación:	 
 ```
 make build
 ```
-* run container using:
+* ejecución del contenedor de Docker:
 ```
 make run
 ```
-* then in container use:
+* ejecución del servidor:
 ```
 make runserver
 ```
-* go to "127.0.0.1:8000/" on your browser
+* Ir a "127.0.0.1:8000/" en el navegador.
 
