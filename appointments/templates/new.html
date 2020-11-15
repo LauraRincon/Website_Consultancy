@@ -51,7 +51,6 @@
       {% if user.is_authenticated %}
   			<h1>Create a new Project</h1>
   			<h2>{{ note }}</h2>
-  			<img src="{% static 'appointments/images/clipboard.png' %}" alt="Img">
   			
         <form action="{% url 'new' %}" method="POST">
             {% csrf_token %}
@@ -66,6 +65,11 @@
             {% endfor %}
 						<input type="submit" vaule="New client Object">
 				</form>
+		<div id='calendar'>
+			<h1>Month's active appointments</h1>
+			{{ calendar }}
+		</div>
+		
       {% endif %}
 		</div>
 	</div>

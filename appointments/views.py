@@ -7,21 +7,21 @@ from datetime import datetime
 from django.utils.safestring import mark_safe
 
 from .models import Client, Project
-from .forms import ProjForm, ClientForm, AdminProjForm
+from .forms import ProjForm, ClientForm, StaffProjForm
 from .utils import Calendar
 
 # Create your views here.
 @login_required
 def new(request):
-    new_form = AdminProjForm() if request.user.is_superuser else ProjForm()
+    cal = calendar(request)
+    new_form = StaffProjForm() if request.user.is_staff else ProjForm()
     if request.method == 'POST':
         new_proj = None
         user = None
-        if request.user.is_superuser:
-            filled_form = AdminProjForm(request.POST)
+        if request.user.is_staff:
+            filled_form = StaffProjForm(request.POST)
             if filled_form.is_valid():
                 client = request.POST.get("client")
-                print(client)
                 user = Client.objects.get(id= client)
                 new_proj = filled_form.save(commit=False)
             else:
@@ -59,6 +59,7 @@ def new(request):
             {
                 'projectform': new_form,
                 'note': note,
+                'calendar': cal,
             }
         )
     else:
@@ -69,24 +70,16 @@ def new(request):
             {
                 'note': note,
                 'projectform': new_form,
+                'calendar': cal,
             }
         )
 
 
 @login_required
-def calendar(request, id):
+def calendar(request):
     date = datetime.today()
-    cal = Calendar(id, date.year, date.month)
-    html_cal = cal.formatmonth(id, withyear=True)
-    context = mark_safe(html_cal)
-    return context
-
-
-@login_required
-def calendar(request, id):
-    date = datetime.today()
-    cal = Calendar(id, date.year, date.month)
-    html_cal = cal.formatmonth(id, withyear=True)
+    cal = Calendar(date.year, date.month)
+    html_cal = cal.formatmonth(withyear=True)
     context = mark_safe(html_cal)
     return context
 
@@ -202,7 +195,7 @@ def singup(request):
             }
         )
     else:
-        note = 'Regiter your user'
+        note = ' '
         return render(
             request,
             'singup.html',
@@ -216,7 +209,7 @@ def singup(request):
 @login_required
 def modify(request, pk=None):
     note = ''
-    cal = calendar(request, request.user.id)
+    cal = calendar(request)
     if request.method == 'POST':
         filled_form = ProjForm(request.POST)
         try:
