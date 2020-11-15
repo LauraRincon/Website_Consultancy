@@ -33,7 +33,7 @@
 					<li>
 						<a href="{% url 'logout' %}">Log Out</a>
 					</li>
-					
+
 				{% else %}
 					<li>
 						<a href="{% url 'login' %}">Log In</a>
@@ -63,6 +63,16 @@
 
             </div>
             {% endfor %}
+
+						{% if user.is_staff %}
+							<label for="username_choice">Select client: </label>
+							<select id="username_choice" name="username_choice">
+								{% for user in choices %}
+									<option value={{ user.id }} > {{ user.first_name }} {{ user.last_name }}</option>
+								{% endfor%}
+							</select> <br>
+						{% endif %}
+
 						<input type="submit" vaule="New client Object">
 				</form>
 		<div id='calendar'>
