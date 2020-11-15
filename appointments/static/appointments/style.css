@@ -22,9 +22,11 @@ img {
 	border: 0;
 }
 
-#img-index{
+img#img-index{
 	height: 400px;
+	padding: 100px 0px 100px 200px;
 }
+
 /*------------------------------ HEADER ------------------------------*/
 #navigation li a, #contact form input.btn {
 	background: url("images/buttons.png") no-repeat;
@@ -93,6 +95,10 @@ img {
 	margin: 0 auto;
 	padding-top: 30px;
 }
+#calendar {
+	display: block;
+	margin: 150px 0px;
+}
 #contents h1, h3, h5 {
 	color: #836544;
 	font-family: 'Caudex-Regular';
@@ -103,13 +109,7 @@ img {
 #contents h5 {
 	color: #474747;
 }
-#contents p {
-	color: #474747;
-	font-size: 13px;
-	line-height: 24px;
-	margin: 0;
-	padding: 0 0 24px;
-}
+
 #contents p a {
 	color: #474747;
 }
@@ -170,6 +170,9 @@ img {
 	bottom: -72px;
 	left: 0;
 }
+
+
+
 /** Featured **/
 #featured {
 	padding: 18px 0;
@@ -359,9 +362,15 @@ img {
 #contact {
 	min-height: 840px;
 }
-#contact img {
+img#img-signup, img#img-proj {
 	float: right;
-	margin: 6px 0 30px 20px;
+	height: 250px;
+	/* margin: 0px 0 30px 20px; */
+}
+img#img-login{
+	float: left;
+	height: 300px;
+	margin: 6px 50px 6px 0px;
 }
 #contact form table {
 	border-collapse: collapse;
@@ -588,9 +597,9 @@ img {
 }
 
 .table {
-	width: 100%;
+	width: 60%;
 	color: #212529;
-  }
+}
 
 .table-bordered {
 	border: 1px solid #836544;
@@ -604,16 +613,62 @@ img {
   .table-bordered thead th,
   .table-bordered thead td {
 	 border-bottom-width: 2px; 
+	 height: min-content;
   }
 
-  @media (max-width: 575.98px) {
-	.table-responsive-sm {
-	  display: block;
-	  width: 100%;
-	  overflow-x: auto;
-	  -webkit-overflow-scrolling: touch;
-	}
-	.table-responsive-sm > .table-bordered {
-	  border: 0;
-	}
-  }
+  .table-success{
+	background-color: #6d773a;
+	color: seashell;
+	height: min-content;
+}
+
+
+
+#contents p {
+	color: #474747;
+	font-size: 13px;
+	line-height: 24px;
+	margin: 0;
+	padding: 0 0 24px;
+}
+
+p#table{
+	background-color: #6d773a;
+	color: seashell;
+	height: min-content;
+}
+
+
+.form-group{
+	display: block;
+	width: 40%;
+	height: calc(1.5em + 0.75rem + 2px);
+	padding: 0.375rem 0.75rem;
+	font-size: 1rem;
+	font-weight: 700;
+	line-height: 1.5;
+	color: #495057;
+	background-clip: padding-box;
+	border: 1px solid #ced4da;
+	border-radius: 0.25rem;
+	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	margin-bottom: 1rem;
+}
+
+input,
+select,
+textarea {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+input[type="date"].form-control,
+input[type="time"].form-control,
+input[type="datetime-local"].form-control,
+input[type="month"].form-control {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
