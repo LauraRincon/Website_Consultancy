@@ -28,6 +28,6 @@ urlpatterns = [
     path('delete/<int:pk>', views.delete, name='delete'),
     path('new/', views.new, name='new'),
     path('', views.index, name='index'), 
-    path('singup', views.singup, name='singup'),
+    path('signup', views.signup, name='signup'),
     path('modify/<int:pk>nder', views.modify, name='modify'),
     ]

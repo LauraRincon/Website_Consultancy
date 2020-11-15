@@ -21,7 +21,7 @@
 					</li>
 					{% if user.is_staff %}
 					<li>
-						<a href="{% url 'singup' %}">Add user</a>
+						<a href="{% url 'signup' %}">Add user</a>
 					</li>
 					{% endif %}
 					
@@ -33,7 +33,7 @@
 						<a href="{% url 'login' %}">Log In</a>
 					</li>
 					<li>
-						<a href="{% url 'singup' %}">Sing Up</a>
+						<a href="{% url 'signup' %}">Sign Up</a>
 					</li>
 				{% endif %}
 
@@ -42,11 +42,11 @@
 	</div>
 	<div id="contents">
 		<div id="contact">
-			<h1>Sing Up</h1>
+			<h1>Sign Up</h1>
 			<h2>{{ note }}</h2>
 			<img src="{% static 'appointments/images/add.png' %}" alt="Img" id="img-signup">
 			
-			<form action="{% url 'singup' %}" method="POST">
+			<form action="{% url 'signup' %}" method="POST">
 					{% csrf_token %}
 					{% for field in clientform %}
 					<div class="form-group">

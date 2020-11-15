@@ -16,7 +16,7 @@ def index(request):
         'index.html',
     )
 
-def singup(request):
+def signup(request):
     new_form = ClientForm()
     if request.method == 'POST':
         filled_form = ClientForm(request.POST)
@@ -37,7 +37,7 @@ def singup(request):
             note = 'Invalid form values, no user created'
         return render(
             request,
-            'singup.html',
+            'signup.html',
             {
                 'clientform': new_form,
                 'note': note,
@@ -48,7 +48,7 @@ def singup(request):
         note = ' '
         return render(
             request,
-            'singup.html',
+            'signup.html',
             {
                 'note': note,
                 'clientform': new_form,

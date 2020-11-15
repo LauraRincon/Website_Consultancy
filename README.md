@@ -6,6 +6,9 @@ Página web para calendarizar citas para proyectos de consultoría. La página p
 * Ricardo Jiménez Anchía
 * Laura Rincón Riveros
 
+# Documentación
+Revisar doc/Guide.rst para obtener información más detallada del proyecto.
+
 # Compilación
 Las siguientes instrucciones son necesarias para la creación de la imagen en Docker y la ejecución de la página:
 * compilación:	 
@@ -20,5 +23,5 @@ make run
 ```
 make runserver
 ```
-* Ir a "127.0.0.1:8000/" en el navegador.
+* Ir a "0.0.0.0:8000/" en el navegador.
 
