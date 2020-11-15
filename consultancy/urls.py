@@ -30,5 +30,4 @@ urlpatterns = [
     path('', views.index, name='index'), 
     path('singup', views.singup, name='singup'),
     path('modify/<int:pk>nder', views.modify, name='modify'),
-    path('about', views.about, name='about'),
     ]

@@ -1,14 +1,8 @@
+{% extends 'base.html' %}
 {% load widget_tweaks %}
 {% load static %}
-<!DOCTYPE html>
-<!-- Website template by freewebsitetemplates.com -->
-<html>
-<head>
-	<meta charset="UTF-8">
-	<title>Web Consultancy</title>
-	<link rel="stylesheet" href="{% static 'appointments/style.css' %}" type="text/css">
-</head>
-<body>
+
+{% block content %}
 	<div id="header">
 		<div>
 			<div id="logo">
@@ -23,15 +17,16 @@
 				</li>
 				{% if user.is_authenticated %}
 					<li>
-						<a href="{% url 'logout' %}">Log Out</a>
+						<a href="{% url 'new' %}">Add Project</a>
 					</li>
 					{% if user.is_staff %}
 					<li>
 						<a href="{% url 'singup' %}">Add user</a>
 					</li>
 					{% endif %}
+					
 					<li>
-						<a href="{% url 'new' %}">Add Project</a>
+						<a href="{% url 'logout' %}">Log Out</a>
 					</li>
 				{% else %}
 					<li>
@@ -49,10 +44,8 @@
 		<div id="contact">
 			<h1>Sing Up</h1>
 			<h2>{{ note }}</h2>
-			<img src="{% static 'appointments/images/telephone.png' %}" alt="Img">
-			<p>
-				This website template has been designed by <a href="http://www.freewebsitetemplates.com/">Free Website Templates</a> for you, for free. You can replace all this text with your own text. You can remove any link to our website from this website template, you're free to use this website template without linking back to us. If you're having problems editing this website template, then don't hesitate to ask for help on the <a href="http://www.freewebsitetemplates.com/forums/">Forum</a>.
-			</p>
+			<img src="{% static 'appointments/images/add.png' %}" alt="Img" id="img-signup">
+			
 			<form action="{% url 'singup' %}" method="POST">
 					{% csrf_token %}
 					{% for field in clientform %}
@@ -71,65 +64,4 @@
 			</form>
 		</div>
 	</div>
-	<div id="footer">
-		<div id="articles">
-			<div class="header">
-				<div class="body">
-					<div>
-						<div class="section">
-							<h3>About us</h3>
-							<p>
-								We are a highly proactive group in the constant search of innovativa ideas to help our clients grow.
-							</p>
-						</div>
-						<div class="section">
-							<h3>Latest Blog Posts</h3>
-							<ul class="blog">
-								<li>
-									<p>
-										<span>Posted Feb. 21, 2020</span> <a href="blog.html">Choosing The Right PV Technology</a> There's constant debate about what you need, cuting-edge tech or the cheapest.
-									</p>
-								</li>
-								<li>
-									<p>
-										<span>Posted Nov. 13, 2019</span> <a href="blog.html">Upcoming Trends In The Industry</a> Find out what ideas are booming in the international summits.
-								</li>
-							</ul>
-						</div>
-						<div class="section">
-							<h3>Contact Information</h3>
-							<table class="info">
-								<tbody>
-									<tr>
-										<td>Address:</td>
-										<td>Montes de Oca, Costa Rica</td>
-									</tr> <tr>
-										<td>Phone:</td>
-										<td>(506) 2222-2222</td>
-									</tr> <tr>
-										<td>Hours Open:</td>
-										<td>Monday - Friday: 10 am- 5pm</td>
-									</tr>
-								</tbody>
-							</table>
-							<h3>Follow us</h3>
-							<div id="connect">
-								<a href="http://freewebsitetemplates.com/go/facebook/" target="_blank" class="facebook"></a> <a href="http://freewebsitetemplates.com/go/twitter/" target="_blank" class="twitter"></a> <a href="http://freewebsitetemplates.com/go/googleplus/" target="_blank" class="googleplus"></a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="footer">
-			<form action="index.html" method="post">
-				<input type="text" value="Enter email for news" class="txtfield" onMouseUp="return false;" onFocus="this.select();">
-				<input type="submit" value="SIGNUP" class="btn">
-			</form>
-			<p>
-				© 2023 Hair Repair. All Rights Reserved. <a href="{% url 'index' %}">Privacy Policy</a> <a href="{% url 'index' %}s">Terms and Conditions</a>
-			</p>
-		</div>
-	</div>
-</body>
-</html>
+{% endblock content %}
