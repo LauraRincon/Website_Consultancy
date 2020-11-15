@@ -8,7 +8,7 @@ import datetime
 
 CATEGORY = [
     ('Residential', 'Residential'),
-    ('Comertial', 'Comertial'),
+    ('Comercial', 'Comercial'),
     ('Industrial', 'Industrial'),
     ('Medium Voltage Industrial', 'Medium Voltage Industrial'),
     ('Large Scale', 'Large Scale')
