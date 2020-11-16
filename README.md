@@ -23,5 +23,5 @@ make run
 ```
 make runserver
 ```
-* Ir a "0.0.0.0:8000/" en el navegador.
+* Ir a "127.0.0.1:8000/" en el navegador.
 
