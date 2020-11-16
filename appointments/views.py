@@ -20,19 +20,18 @@ def signup(request):
     new_form = ClientForm()
     if request.method == 'POST':
         filled_form = ClientForm(request.POST)
+        # Process filled form
         if filled_form.is_valid():
             filled_form.save()
             note = "Your registry was succesful! Please go back to the \
                     homepage and log in"
             staff = request.POST.get("staff")
+            # New user registered by staff user.
             if staff:
                 new_user = Client.objects.get(
                     username=request.POST.get('username'))
-                print(new_user)
-                print(new_user.is_staff)
                 new_user.is_staff = True
                 new_user.save()
-                print(new_user.is_staff)
         else:
             note = 'Invalid form values, no user created'
         return render(
@@ -45,6 +44,7 @@ def signup(request):
             }
         )
     else:
+        # Render form to be filled by the user
         note = ' '
         return render(
             request,
@@ -57,22 +57,25 @@ def signup(request):
 
 @login_required
 def new(request):
+    # Load form and calendar instances
     new_form = ProjForm()
     cal = calendar(request)
     choices = []
+    # If is a staff user, display choice option
     for user in Client.objects.filter(is_staff=False):
         choices.append(user)
 
     if request.method == 'POST':
-
+        # Process filled form for the new project
         filled_form = ProjForm(request.POST)
         if filled_form.is_valid():
             if request.user.is_staff:
+                # New project registered by staff user
                 user = Client.objects.get(
                     id=request.POST.get('username_choice'))
             else:
                 user = Client.objects.get(id=request.user.id)
-
+            # Save new project
             new_proj = filled_form.save(commit=False)
             dateAvailable = True
             for project in Project.objects.all():

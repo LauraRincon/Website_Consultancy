@@ -32,4 +32,4 @@ class Project(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
-        return "{} - <<{}>>".format(self.name, self.appt_date)
+        return "{} : {}".format(self.name, self.appt_date)
