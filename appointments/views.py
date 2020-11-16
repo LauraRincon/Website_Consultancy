@@ -220,7 +220,7 @@ def modify(request, pk=None):
         except Project.DoesNotExist:
             raise Http404('Project with pk {} doesn\'t exist'.format(pk))
         if filled_form.is_valid():
-            user = Client.objects.get(id=request.user.id)
+            user = old_proj.client
             new_proj = filled_form.save(commit=False)
             old_proj.delete()
 
