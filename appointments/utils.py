@@ -25,10 +25,10 @@ class Calendar(HTMLCalendar):
         for d, weekday in theweek:
             week += self.formatday(d, events)
         return f'<tr> {week} </tr>'
-    
+
     def formatmonth(self, withyear=True):
         events = Project.objects.filter(appt_date__year=self.year, appt_date__month=self.month)
-        cal =  "<div>\n" 
+        cal =  "<div>\n"
         cal += f"<table class='table table-bordered'>\n"
 
         cal += f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
@@ -37,6 +37,3 @@ class Calendar(HTMLCalendar):
             cal += f'{self.formatweek(week, events)}\n'
         cal +=  "</tdbody>\n</table>\n</div>\n"
         return cal
-
-
-

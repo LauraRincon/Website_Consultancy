@@ -83,12 +83,9 @@ def new(request):
             if dateAvailable:
                 new_proj.client = user
                 new_proj.save()
-                new_pk = new_proj.pk
                 note = (
-                    'Project object with pk \'{}\' was successfully created,\n'
-                    'Name: {}.'.format(
-                        new_pk, filled_form.cleaned_data['name']
-                        )
+                    'Project was successfully created,\n'
+                    'Name: {}.'.format(filled_form.cleaned_data['name'])
                 )
 
             else:
@@ -97,7 +94,7 @@ def new(request):
             note = 'Invalid form values, no project created'
 
         return render(
-            request,       
+            request,
             'new.html',
             {
                 'projectform': new_form,
@@ -238,9 +235,8 @@ def modify(request, pk=None):
                 new_proj.save()
                 new_pk = new_proj.pk
                 note = (
-                    'Project object with pk \'{}\' was successfully modified, '
-                    'Name: {}.'.format(
-                     new_pk, filled_form.cleaned_data['name'])
+                    'Project was successfully modified, '
+                    'Name: {}.'.format(filled_form.cleaned_data['name'])
                 )
                 new_form = filled_form
                 pk = new_pk

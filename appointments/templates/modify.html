@@ -42,13 +42,13 @@
 	<div id="contents">
 		<div id="contact">
 	  {% if user.is_authenticated %}
-	  		
+
   			<h1>Modify your Project</h1>
   			<h2>{{ note }}</h2>
   			<img src="{% static 'appointments/images/clipboard.png' %}" alt="Img">
-  			
-			
-			
+
+
+
         <form action="{% url 'modify' project_pk %}" method="POST">
             {% csrf_token %}
 
@@ -60,8 +60,8 @@
 
             </div>
 			{% endfor %}
-			
-			
+
+
 
             <input type="submit" vaule="Modify Project">
         </form>
@@ -71,6 +71,6 @@
 			{{ calendar }}
 	  	</div>
 	</div>
-		
+
 	</div>
 {% endblock content %}

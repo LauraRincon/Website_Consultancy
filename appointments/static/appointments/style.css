@@ -604,15 +604,15 @@ img#img-login{
 .table-bordered {
 	border: 1px solid #836544;
   }
-  
+
   .table-bordered th,
   .table-bordered td {
 	border: 1px solid #836544;
   }
-  
+
   .table-bordered thead th,
   .table-bordered thead td {
-	 border-bottom-width: 2px; 
+	 border-bottom-width: 2px;
 	 height: min-content;
   }
 

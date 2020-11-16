@@ -24,7 +24,7 @@
 						<a href="{% url 'signup' %}">Add user</a>
 					</li>
 					{% endif %}
-					
+
 					<li>
 						<a href="{% url 'logout' %}">Log Out</a>
 					</li>
@@ -45,7 +45,7 @@
 			<h1>Sign Up</h1>
 			<h2>{{ note }}</h2>
 			<img src="{% static 'appointments/images/add.png' %}" alt="Img" id="img-signup">
-			
+
 			<form action="{% url 'signup' %}" method="POST">
 					{% csrf_token %}
 					{% for field in clientform %}

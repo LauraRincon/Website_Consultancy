@@ -51,7 +51,7 @@
       {% if user.is_authenticated %}
   			<h1>Create a new Project</h1>
   			<h2>{{ note }}</h2>
-  			
+
         <form action="{% url 'new' %}" method="POST">
             {% csrf_token %}
 
@@ -79,7 +79,7 @@
 			<h1>Month's active appointments</h1>
 			{{ calendar }}
 		</div>
-		
+
       {% endif %}
 		</div>
 	</div>
